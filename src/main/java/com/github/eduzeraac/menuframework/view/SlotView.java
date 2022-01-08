@@ -1,12 +1,10 @@
 package com.github.eduzeraac.menuframework.view;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.Data;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
-@RequiredArgsConstructor
-@Getter
+@Data
 public class SlotView {
 
     private final Player player;

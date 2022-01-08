@@ -1,11 +1,9 @@
 package com.github.eduzeraac.menuframework.paginate;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.Data;
 import org.bukkit.entity.Player;
 
-@RequiredArgsConstructor
-@Getter
+@Data
 public class SwitchPaginateView {
 
     private final PaginateView paginateView;
