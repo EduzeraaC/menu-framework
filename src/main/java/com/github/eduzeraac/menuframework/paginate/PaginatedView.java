@@ -15,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
 @Getter
-public class PaginateView extends View {
+public class PaginatedView extends View {
 
     private final int[] slots;
     private final int size;
@@ -25,7 +25,7 @@ public class PaginateView extends View {
     private ItemView backItem;
     private ItemView nextItem;
 
-    public PaginateView(String title, int rows, int size, int... slots) {
+    public PaginatedView(String title, int rows, int size, int... slots) {
         super(title, rows);
         this.size = size;
         this.slots = slots;

@@ -6,6 +6,6 @@ import org.bukkit.entity.Player;
 @Data
 public class SwitchPaginateView {
 
-    private final PaginateView paginateView;
+    private final PaginatedView paginatedView;
     private final Player player;
 }
