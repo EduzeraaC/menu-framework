@@ -13,7 +13,6 @@ import java.util.List;
 public class VirtualView {
 
     private final List<ItemView> content;
-    private String[] layout;
 
     public VirtualView() {
         this.content = new ArrayList<>();
@@ -21,8 +20,9 @@ public class VirtualView {
 
     public ItemView getItem(int slot) {
         for (ItemView itemView : content) {
-            if (itemView == null || itemView.getSlot() != slot) continue;
-            return itemView;
+            final Integer itemViewSlot = itemView.getSlot();
+            if (itemViewSlot == null) continue;
+            if (itemViewSlot == slot) return itemView;
         }
         return null;
     }
@@ -65,5 +65,12 @@ public class VirtualView {
 
             render(itemView, inventory);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "VirtualView{" +
+          "content=" + content +
+          '}';
     }
 }

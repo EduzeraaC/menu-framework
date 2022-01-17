@@ -10,9 +10,9 @@ import java.util.Map;
 public class ItemView {
 
     private boolean cancelClick;
-    private boolean paginateItem;
     private Integer slot;
     private ItemStack itemStack;
+    private ItemViewHandler clickHandler;
     private final Map<String, Object> data;
 
     public ItemView() {
@@ -25,13 +25,18 @@ public class ItemView {
         return this;
     }
 
-    public ItemView withSlot(int slot) {
+    public ItemView withSlot(Integer slot) {
         this.slot = slot;
         return this;
     }
 
     public ItemView withData(String key, Object value) {
         data.put(key, value);
+        return this;
+    }
+
+    public ItemView onClick(ItemViewHandler itemViewHandler) {
+        this.clickHandler = itemViewHandler;
         return this;
     }
 
@@ -52,18 +57,13 @@ public class ItemView {
         return this;
     }
 
-    public ItemView paginateItem(boolean paginateItem) {
-        this.paginateItem = paginateItem;
-        return this;
-    }
-
     @Override
     public String toString() {
         return "ItemView{" +
           "cancelClick=" + cancelClick +
-          ", paginateItem=" + paginateItem +
           ", slot=" + slot +
           ", itemStack=" + itemStack +
+          ", clickHandler=" + clickHandler +
           ", data=" + data +
           '}';
     }

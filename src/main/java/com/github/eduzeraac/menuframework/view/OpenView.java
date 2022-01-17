@@ -8,4 +8,5 @@ public class OpenView {
 
     private final Player player;
     private final View view;
+
 }

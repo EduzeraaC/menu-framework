@@ -17,16 +17,16 @@ public class ListenerView implements Listener {
     }
 
     @EventHandler
-    private void onClick(InventoryClickEvent event) {
-        if (!(event.getInventory().getHolder() instanceof View) || event.getCurrentItem() == null) return;
+    public void onClick(InventoryClickEvent event) {
+        if (!(event.getInventory().getHolder() instanceof View)) return;
 
         final View holder = (View) event.getInventory().getHolder();
         final ItemView itemView = holder.getItem(event.getSlot());
         if (itemView == null) return;
+        if (itemView.isCancelClick()) event.setCancelled(true);
+        final SlotView slotView = new SlotView(((Player) event.getWhoClicked()), event, itemView);
 
-        if (itemView.isCancelClick()) {
-            event.setCancelled(true);
-        }
-        holder.onClick(new SlotView(((Player) event.getWhoClicked()), event, itemView));
+        itemView.getClickHandler().handle(slotView);
+        holder.onClick(slotView);
     }
 }

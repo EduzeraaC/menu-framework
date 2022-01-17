@@ -38,4 +38,13 @@ public class View extends VirtualView implements InventoryHolder {
     public void onClick(SlotView slotView) {
 
     }
+
+    @Override
+    public String toString() {
+        return "View{" +
+          "title='" + title + '\'' +
+          ", rows=" + rows +
+          ", inventory=" + inventory +
+          '}';
+    }
 }

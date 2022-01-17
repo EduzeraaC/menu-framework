@@ -4,7 +4,6 @@ import com.github.eduzeraac.menuframework.view.ItemView;
 import com.github.eduzeraac.menuframework.view.OpenView;
 import com.github.eduzeraac.menuframework.view.SlotView;
 import com.github.eduzeraac.menuframework.view.View;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,12 +32,13 @@ public class PaginatedView extends View {
     }
 
     public ItemView backItem(int slot, ItemStack itemStack) {
-        this.backItem = item(itemStack, slot).paginateItem(true);
+        this.backItem = item(itemStack, slot).onClick(this::openBackPage);
+        this.backItem = item(itemStack, slot).onClick(this::openBackPage);
         return backItem;
     }
 
     public ItemView nextItem(int slot, ItemStack itemStack) {
-        this.nextItem = item(itemStack, slot).paginateItem(true);
+        this.nextItem = item(itemStack, slot).onClick(this::openNextPage);
         return nextItem;
     }
 
@@ -49,13 +49,18 @@ public class PaginatedView extends View {
 
     private void resolve(Inventory inventory) {
         final List<ItemView> items = pages.get(currentPage);
-        for (int index = 0; index < items.size(); index++) {
 
-            final ItemView itemView = items.get(index);
+        for (int index = 0; index < size; index++) {
             final int slot = slots[index];
-            itemView.withSlot(slot);
+            final ItemView oldItem = getItem(slot);
+            if (oldItem != null) oldItem.withSlot(null);
 
-            render(itemView, slot, inventory);
+            if (index >= items.size()) continue;
+            final ItemView newItem = items.get(index);
+            if (newItem.equals(nextItem) || newItem.equals(backItem)) continue;
+
+            newItem.withSlot(slot);
+            render(newItem, slot, inventory);
         }
         renderNavigation(inventory);
     }
@@ -70,45 +75,30 @@ public class PaginatedView extends View {
     @Override
     public void open(Player player) {
         final Inventory inventory = getInventory();
-        this.pages = Lists.partition(ImmutableList.copyOf(getContent()), size);
+        final List<ItemView> content = getContent();
+        this.pages = Lists.partition(content, size);
+
         addItem(nextItem);
         addItem(backItem);
         resolve(inventory);
-
         player.openInventory(inventory);
         onOpen(new OpenView(player, this));
     }
 
-    public void onSwitch(SwitchPaginateView switchPaginateView) {
-
-    }
-
-    @Override
-    public void onClick(SlotView slotView) {
-        final ItemView itemView = slotView.getItemView();
-        if (itemView.isPaginateItem()) {
-            final Player player = slotView.getPlayer();
-            final Inventory inventory = slotView.getOrigin().getInventory();
-            if (itemView.equals(nextItem)) {
-                onNext();
-                switchPage(inventory, player);
-                return;
-            }
-            if (itemView.equals(backItem)) {
-                onBack();
-                switchPage(inventory, player);
-            }
-        }
-    }
-
-    public void onNext() {
+    private void openNextPage(SlotView slotView) {
         currentPage = currentPage
           >= pages.size() - 1
           ? 0
           : currentPage + 1;
+        switchPage(slotView.getOrigin().getInventory(), slotView.getPlayer());
     }
 
-    public void onBack() {
+    private void openBackPage(SlotView slotView) {
         currentPage = currentPage < 1 ? 0 : currentPage - 1;
+        switchPage(slotView.getOrigin().getInventory(), slotView.getPlayer());
+    }
+
+    public void onSwitch(SwitchPaginateView switchPaginateView) {
+
     }
 }
