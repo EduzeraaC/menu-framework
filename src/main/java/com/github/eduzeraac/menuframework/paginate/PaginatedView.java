@@ -33,7 +33,6 @@ public class PaginatedView extends View {
 
     public ItemView backItem(int slot, ItemStack itemStack) {
         this.backItem = item(itemStack, slot).onClick(this::openBackPage);
-        this.backItem = item(itemStack, slot).onClick(this::openBackPage);
         return backItem;
     }
 
@@ -75,8 +74,7 @@ public class PaginatedView extends View {
     @Override
     public void open(Player player) {
         final Inventory inventory = getInventory();
-        final List<ItemView> content = getContent();
-        this.pages = Lists.partition(content, size);
+        this.pages = Lists.partition(getContent(), size);
 
         addItem(nextItem);
         addItem(backItem);
