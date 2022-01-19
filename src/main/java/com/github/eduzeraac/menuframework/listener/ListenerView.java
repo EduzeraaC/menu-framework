@@ -2,6 +2,7 @@ package com.github.eduzeraac.menuframework.listener;
 
 import com.github.eduzeraac.menuframework.MenuPlugin;
 import com.github.eduzeraac.menuframework.view.ItemView;
+import com.github.eduzeraac.menuframework.view.ItemViewHandler;
 import com.github.eduzeraac.menuframework.view.SlotView;
 import com.github.eduzeraac.menuframework.view.View;
 import org.bukkit.Bukkit;
@@ -26,7 +27,9 @@ public class ListenerView implements Listener {
         if (itemView.isCancelClick()) event.setCancelled(true);
         final SlotView slotView = new SlotView(((Player) event.getWhoClicked()), event, itemView);
 
-        itemView.getClickHandler().handle(slotView);
+        final ItemViewHandler clickHandler = itemView.getClickHandler();
+        if (clickHandler != null) clickHandler.handle(slotView);
+        
         holder.onClick(slotView);
     }
 }

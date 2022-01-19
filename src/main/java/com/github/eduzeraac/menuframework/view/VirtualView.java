@@ -46,6 +46,7 @@ public class VirtualView {
     }
 
     public void addItem(ItemView itemView) {
+        if (itemView == null) return;
         content.add(itemView);
     }
 
