@@ -1,6 +1,5 @@
 package com.github.eduzeraac.menuframework.listener;
 
-import com.github.eduzeraac.menuframework.MenuPlugin;
 import com.github.eduzeraac.menuframework.view.ItemView;
 import com.github.eduzeraac.menuframework.view.ItemViewHandler;
 import com.github.eduzeraac.menuframework.view.SlotView;
@@ -10,10 +9,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.plugin.Plugin;
 
 public class ListenerView implements Listener {
 
-    public ListenerView(MenuPlugin plugin) {
+    public ListenerView(Plugin plugin) {
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
@@ -29,7 +29,7 @@ public class ListenerView implements Listener {
 
         final ItemViewHandler clickHandler = itemView.getClickHandler();
         if (clickHandler != null) clickHandler.handle(slotView);
-        
+
         holder.onClick(slotView);
     }
 }
