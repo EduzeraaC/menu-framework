@@ -66,8 +66,8 @@ public class PaginatedView extends View {
 
     public void switchPage(Inventory inventory, Player player) {
         inventory.clear();
-        resolve(inventory);
         onSwitch(new SwitchPaginateView(this, player));
+        resolve(inventory);
         player.openInventory(inventory);
     }
 
@@ -83,7 +83,7 @@ public class PaginatedView extends View {
         onOpen(new OpenView(player, this));
     }
 
-    private void openNextPage(SlotView slotView) {
+    public void openNextPage(SlotView slotView) {
         currentPage = currentPage
           >= pages.size() - 1
           ? 0
@@ -91,7 +91,7 @@ public class PaginatedView extends View {
         switchPage(slotView.getOrigin().getInventory(), slotView.getPlayer());
     }
 
-    private void openBackPage(SlotView slotView) {
+    public void openBackPage(SlotView slotView) {
         currentPage = currentPage < 1 ? 0 : currentPage - 1;
         switchPage(slotView.getOrigin().getInventory(), slotView.getPlayer());
     }
