@@ -1,9 +1,6 @@
 package com.github.eduzeraac.menuframework.paginate;
 
-import com.github.eduzeraac.menuframework.view.ItemView;
-import com.github.eduzeraac.menuframework.view.OpenView;
-import com.github.eduzeraac.menuframework.view.SlotView;
-import com.github.eduzeraac.menuframework.view.View;
+import com.github.eduzeraac.menuframework.view.*;
 import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Getter
@@ -31,19 +29,24 @@ public class PaginatedView extends View {
         this.currentPage = 0;
     }
 
-    public ItemView backItem(int slot, ItemStack itemStack) {
-        this.backItem = item(itemStack, slot).onClick(this::openBackPage);
+    public ItemView setBackItem(int slot, ItemStack itemStack, ItemViewHandler itemViewHandler) {
+        this.backItem = item(itemStack, slot).onClick(itemViewHandler);
         return backItem;
     }
 
-    public ItemView nextItem(int slot, ItemStack itemStack) {
-        this.nextItem = item(itemStack, slot).onClick(this::openNextPage);
+    public ItemView setBackItem(int slot, ItemStack itemStack) {
+        setBackItem(slot, itemStack, this::openBackPage);
+        return backItem;
+    }
+
+    public ItemView setNextItem(int slot, ItemStack itemStack, ItemViewHandler itemViewHandler) {
+        this.nextItem = item(itemStack, slot).onClick(itemViewHandler);
         return nextItem;
     }
 
-    public void renderNavigation(Inventory inventory) {
-        render(nextItem, inventory);
-        render(backItem, inventory);
+    public ItemView setNextItem(int slot, ItemStack itemStack) {
+        setNextItem(slot, itemStack, this::openNextPage);
+        return nextItem;
     }
 
     private void resolve(Inventory inventory) {
@@ -61,7 +64,8 @@ public class PaginatedView extends View {
             newItem.withSlot(slot);
             render(newItem, slot, inventory);
         }
-        renderNavigation(inventory);
+        render(nextItem, inventory);
+        render(backItem, inventory);
     }
 
     public void switchPage(Inventory inventory, Player player) {
@@ -98,5 +102,17 @@ public class PaginatedView extends View {
 
     public void onSwitch(SwitchPaginateView switchPaginateView) {
 
+    }
+
+    @Override
+    public String toString() {
+        return "PaginatedView{" +
+          "slots=" + Arrays.toString(slots) +
+          ", size=" + size +
+          ", pages=" + pages +
+          ", currentPage=" + currentPage +
+          ", backItem=" + backItem +
+          ", nextItem=" + nextItem +
+          '}';
     }
 }

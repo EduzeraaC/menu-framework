@@ -46,23 +46,21 @@ public class VirtualView {
     }
 
     public void addItem(ItemView itemView) {
-        if (itemView == null) return;
         content.add(itemView);
     }
 
     public void render(ItemView itemView, int slot, Inventory inventory) {
         inventory.setItem(slot, itemView.getItemStack());
-
     }
 
     public void render(ItemView itemView, Inventory inventory) {
-        if (itemView == null) return;
         render(itemView, itemView.getSlot(), inventory);
     }
 
     public void render(Inventory inventory) {
         for (ItemView itemView : content) {
-            if (itemView == null || itemView.getSlot() == null) continue;
+            if (itemView == null) continue;
+            if (itemView.getSlot() == null) continue;
 
             render(itemView, inventory);
         }
