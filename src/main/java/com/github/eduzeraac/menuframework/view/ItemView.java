@@ -9,7 +9,6 @@ import java.util.Map;
 @Getter
 public class ItemView {
 
-    private boolean cancelClick;
     private Integer slot;
     private ItemStack itemStack;
     private ItemViewHandler clickHandler;
@@ -17,7 +16,6 @@ public class ItemView {
 
     public ItemView() {
         this.data = new HashMap<>();
-        this.cancelClick = true;
     }
 
     public ItemView withItem(ItemStack itemStack) {
@@ -52,16 +50,10 @@ public class ItemView {
         return data.get(key);
     }
 
-    public ItemView cancelClick(boolean cancelClick) {
-        this.cancelClick = cancelClick;
-        return this;
-    }
-
     @Override
     public String toString() {
         return "ItemView{" +
-          "cancelClick=" + cancelClick +
-          ", slot=" + slot +
+          "slot=" + slot +
           ", itemStack=" + itemStack +
           ", clickHandler=" + clickHandler +
           ", data=" + data +

@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.plugin.Plugin;
 
 public class ListenerView implements Listener {
@@ -21,11 +20,11 @@ public class ListenerView implements Listener {
     @EventHandler
     public void onClick(InventoryClickEvent event) {
         if (!(event.getInventory().getHolder() instanceof View)) return;
+        event.setCancelled(true);
 
         final View holder = (View) event.getInventory().getHolder();
         final ItemView itemView = holder.getItem(event.getSlot());
         if (itemView == null) return;
-        if (itemView.isCancelClick()) event.setCancelled(true);
         final SlotView slotView = new SlotView(((Player) event.getWhoClicked()), event, itemView);
 
         final ItemViewHandler clickHandler = itemView.getClickHandler();
