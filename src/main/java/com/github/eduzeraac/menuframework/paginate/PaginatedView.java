@@ -1,9 +1,9 @@
 package com.github.eduzeraac.menuframework.paginate;
 
 import com.github.eduzeraac.menuframework.view.*;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import lombok.Getter;
-import lombok.Setter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -15,16 +15,13 @@ import java.util.List;
 public class PaginatedView extends View {
 
     private final int[] slots;
-    private final int size;
     private List<List<ItemView>> pages;
-    @Setter
     private int currentPage;
     private ItemView backItem;
     private ItemView nextItem;
 
-    public PaginatedView(String title, int rows, int size, int... slots) {
+    public PaginatedView(String title, int rows, int... slots) {
         super(title, rows);
-        this.size = size;
         this.slots = slots;
         this.currentPage = 0;
     }
@@ -52,14 +49,13 @@ public class PaginatedView extends View {
     private void resolve(Inventory inventory) {
         final List<ItemView> items = pages.get(currentPage);
 
-        for (int index = 0; index < size; index++) {
+        for (int index = 0; index < slots.length; index++) {
             final int slot = slots[index];
             final ItemView oldItem = getItem(slot);
             if (oldItem != null) oldItem.withSlot(null);
 
             if (index >= items.size()) continue;
             final ItemView newItem = items.get(index);
-            if (newItem.equals(nextItem) || newItem.equals(backItem)) continue;
 
             newItem.withSlot(slot);
             render(newItem, slot, inventory);
@@ -78,7 +74,7 @@ public class PaginatedView extends View {
     @Override
     public void open(Player player) {
         final Inventory inventory = getInventory();
-        this.pages = Lists.partition(getContent(), size);
+        this.pages = Lists.partition(ImmutableList.copyOf(getContent()), slots.length);
 
         addItem(nextItem);
         addItem(backItem);
@@ -108,7 +104,6 @@ public class PaginatedView extends View {
     public String toString() {
         return "PaginatedView{" +
           "slots=" + Arrays.toString(slots) +
-          ", size=" + size +
           ", pages=" + pages +
           ", currentPage=" + currentPage +
           ", backItem=" + backItem +
