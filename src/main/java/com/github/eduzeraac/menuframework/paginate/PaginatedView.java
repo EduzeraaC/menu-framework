@@ -47,18 +47,20 @@ public class PaginatedView extends View {
     }
 
     private void resolve(Inventory inventory) {
-        final List<ItemView> items = pages.get(currentPage);
+        if (pages != null && !pages.isEmpty()) {
+            final List<ItemView> items = pages.get(currentPage);
 
-        for (int index = 0; index < slots.length; index++) {
-            final int slot = slots[index];
-            final ItemView oldItem = getItem(slot);
-            if (oldItem != null) oldItem.withSlot(null);
+            for (int index = 0; index < slots.length; index++) {
+                final int slot = slots[index];
+                final ItemView oldItem = getItem(slot);
+                if (oldItem != null) oldItem.withSlot(null);
 
-            if (index >= items.size()) continue;
-            final ItemView newItem = items.get(index);
+                if (index >= items.size()) continue;
+                final ItemView newItem = items.get(index);
 
-            newItem.withSlot(slot);
-            render(newItem, slot, inventory);
+                newItem.withSlot(slot);
+                render(newItem, slot, inventory);
+            }
         }
         render(nextItem, inventory);
         render(backItem, inventory);
@@ -66,24 +68,29 @@ public class PaginatedView extends View {
 
     public void switchPage(Inventory inventory, Player player) {
         inventory.clear();
-        onSwitch(new SwitchPaginateView(this, player));
         resolve(inventory);
+        onSwitch(new SwitchPaginateView(this, player));
         player.openInventory(inventory);
     }
 
     @Override
     public void open(Player player) {
         final Inventory inventory = getInventory();
-        this.pages = Lists.partition(ImmutableList.copyOf(getContent()), slots.length);
+        final List<ItemView> content = getContent();
+        if (!content.isEmpty()) {
+            this.pages = Lists.partition(ImmutableList.copyOf(content), slots.length);
+        }
 
         addItem(nextItem);
         addItem(backItem);
         resolve(inventory);
-        player.openInventory(inventory);
         onOpen(new OpenView(player, this));
+        player.openInventory(inventory);
     }
 
     public void openNextPage(SlotView slotView) {
+        if (pages == null) return;
+
         currentPage = currentPage
           >= pages.size() - 1
           ? 0
